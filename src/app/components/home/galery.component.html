@@ -1,33 +1,35 @@
-<h2>{{ title }}</h2>
-<hr>
+<div>
+  <h2>{{ title }}</h2>
+  <hr>
 
-<div class="row animated fadeIn fast">
+  <div class="row animated fadeIn fast">
 
-  <div class="col-sm-6">
+    <div class="col-sm-6">
 
-    <div class="row">
-      <div *ngFor="let movie of movies.left; let i = index"
-          class="puntero" 
-          [routerLink]="['/movie', movie.id, 'home']"
-      		[ngClass]=" { 'col-md-12 div-pic-1' : i===0, 'col-sm-6 div-pic-2': i!==0 } "
-          [ngStyle]="{ 'background-image': 'url( '+ ( movie | imageMovie )+')'  }">
-          <p class="pic-titulo">{{ movie.title }}</p>
+      <div class="row">
+        <div *ngFor="let movie of movies.left; let i = index"
+            class="puntero" 
+            [routerLink]="['/movie', movie.id, 'home']"
+            [ngClass]=" { 'col-md-12 div-pic-1' : i===0, 'col-sm-6 div-pic-2': i!==0 } "
+            [ngStyle]="{ 'background-image': 'url( '+ ( movie | imageMovie )+')'  }">
+            <p class="pic-titulo">{{ movie.title }}</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="col-sm-6">
+
+      <div class="row">
+        <div *ngFor="let movie of movies.right; let i = index"
+            class="puntero" 
+            [routerLink]="['/movie', movie.id, 'home']"
+            [ngClass]=" { 'col-md-6 div-pic-2' : i!==2, 'col-sm-12 div-pic-1': i===2 } "
+            [ngStyle]="{ 'background-image': 'url( '+ ( movie | imageMovie )+')'  }">
+            <p class="pic-titulo">{{ movie.title }}</p>
+        </div>
       </div>
     </div>
 
   </div>
-
-  <div class="col-sm-6">
-
-    <div class="row">
-      <div *ngFor="let movie of movies.right; let i = index"
-          class="puntero" 
-          [routerLink]="['/movie', movie.id, 'home']"
-      		[ngClass]=" { 'col-md-6 div-pic-2' : i!==2, 'col-sm-12 div-pic-1': i===2 } "
-          [ngStyle]="{ 'background-image': 'url( '+ ( movie | imageMovie )+')'  }">
-          <p class="pic-titulo">{{ movie.title }}</p>
-      </div>
-    </div>
-  </div>
-
-  </div>
+</div>

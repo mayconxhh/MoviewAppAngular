@@ -11,7 +11,6 @@ export class GaleryComponent implements OnInit {
 	@Input('title') title:any ;
 
   constructor() {
-
   }
 
   ngOnInit() {

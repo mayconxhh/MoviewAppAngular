@@ -7,18 +7,18 @@
 
 <div class="container">
 
-	<app-galery title="Películas en cartelera"  [movies]="moviesTheatres"></app-galery>
+	<app-galery title="Películas en cartelera" [movies]="moviesTheatres" *ngIf="successTheatres"></app-galery>
 	
 </div>
 <br>
 <div class="container">
 
-	<app-galery title="Películas populares"  [movies]="popularMovies"></app-galery>
+	<app-galery title="Películas populares" [movies]="popularMovies"  *ngIf="successPopular"></app-galery>
 	
 </div>
 <br>
 <div class="container">
 
-	<app-galery title="Populares entre los niños"  [movies]="popularKids"></app-galery>
+	<app-galery title="Populares entre los niños" [movies]="popularKids"  *ngIf="successPopularKids"></app-galery>
 	
 </div>

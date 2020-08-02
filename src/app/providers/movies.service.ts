@@ -1,5 +1,6 @@
+import { HttpClient } from '@angular/common/http';
+import { environment } from './../../environments/environment';
 import { Injectable } from '@angular/core';
-import { Jsonp } from '@angular/http'
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -7,23 +8,23 @@ import { map } from 'rxjs/operators';
 })
 export class MoviesService {
 
-	private apiKey:string = '...';
-	private urlMoviedb:string = '...';
+	private apiKey:string = environment.API_KEY;
+	private urlMoviedb:string = 'https://api.themoviedb.org/3';
   public movies:any = [];
 
-  constructor( private jsonp:Jsonp ) { }
+  constructor( private http:HttpClient ) { }
 
   getPopular(value:boolean){
 
-  	let url = `${this.urlMoviedb}/discover/movie?sort_by=popularity.desc&api_key=${this.apiKey}&language=es&callback=JSONP_CALLBACK`;
+  	let url = `${this.urlMoviedb}/discover/movie?sort_by=popularity.desc&api_key=${this.apiKey}&language=es`;
 
-  	return this.jsonp.get( url)
-  		.pipe(map( res => {
+  	return this.http.get<any>(url)
+  		.pipe(map( (res ) => {
 
         if (value) {
-          return this.fixObject(res.json().results);
+          return this.fixObject(res.results);
         } else {
-          return res.json().results;
+          return res.results;
         }
 
       }));
@@ -32,12 +33,12 @@ export class MoviesService {
 
   searchMovie( text:string ){
   	
-  	let url = `${this.urlMoviedb}/search/movie?api_key=${this.apiKey}&query=${text}&sort_by=popularity.desc&callback=JSONP_CALLBACK`;
+  	let url = `${this.urlMoviedb}/search/movie?api_key=${this.apiKey}&query=${text}&sort_by=popularity.desc`;
 
-  	return this.jsonp.get( url)
-  		.pipe(map( res => { 
-        this.movies = res.json().results;
-        return res.json().results;
+  	return this.http.get<any>( url )
+  		.pipe(map( res => {
+        this.movies = res.results;
+        return res.results;
       } ));
 
   }
@@ -50,32 +51,32 @@ export class MoviesService {
   	let formatPW = `${prevWeek.getFullYear()}-${prevWeek.getMonth()+1}-${prevWeek.getUTCDate()}`;
 
   	let nextWeek= new Date(date.getTime() + (24*60*60*1000)*7);
-  	let formatNW = `${nextWeek.getFullYear()}-${nextWeek.getMonth()+1}-${nextWeek.getUTCDate()}`;
+    let formatNW = `${nextWeek.getFullYear()}-${nextWeek.getMonth()+1}-${nextWeek.getUTCDate()}`;
 
-  	let url = `${this.urlMoviedb}/discover/movie?primary_release_date.gte=${formatPW}&primary_release_date.lte=${formatNW}&api_key=${this.apiKey}&language=es&callback=JSONP_CALLBACK`;
+  	let url = `${this.urlMoviedb}/discover/movie?primary_release_date.gte=${formatPW}&primary_release_date.lte=${formatNW}&api_key=${this.apiKey}&language=es`;
 
-  	return this.jsonp.get( url)
+  	return this.http.get<any>( url)
   		.pipe(map( res => {
 
         if (value) {
-          return this.fixObject(res.json().results);
+          return this.fixObject(res.results);
         } else {
-          return res.json().results;
+          return res.results;
         }
 
       }));
   }
 
   getPopularKids(value:boolean){
-    let url = `${this.urlMoviedb}/discover/movie?certification_country=US&certification.lte=G&sort_by=popularity.desc&api_key=${this.apiKey}&language=es&callback=JSONP_CALLBACK`;
+    let url = `${this.urlMoviedb}/discover/movie?certification_country=US&certification.lte=G&sort_by=popularity.desc&api_key=${this.apiKey}&language=es`;
 
-    return this.jsonp.get( url)
+    return this.http.get<any>( url)
       .pipe(map( res => {
 
         if (value) {
-          return this.fixObject(res.json().results);
+          return this.fixObject(res.results);
         } else {
-          return res.json().results;
+          return res.results;
         }
 
       }))
@@ -83,13 +84,16 @@ export class MoviesService {
 
   getMovie(id:string){
 
-    let url = `${this.urlMoviedb}/movie/${id}?api_key=${this.apiKey}&language=es&callback=JSONP_CALLBACK`;
+    let url = `${this.urlMoviedb}/movie/${id}?api_key=${this.apiKey}&language=es`;
 
-    return this.jsonp.get( url)
-      .pipe(map( res => res.json()));
+    return this.http.get<any>( url)
+      .pipe(map( res => res));
   }
 
   fixObject(movies:any){
+
+    if(movies.length === 0) return {};
+
     let left:any = [];
     let right:any = [];
     for (var i = 0 ; i <= 2; i++) {
